@@ -6,7 +6,9 @@ ARG TACKLE2_VERSION="release-0.8"
 USER root
 
 COPY pythonpackages.yml /tmp/pythonpackages.yml
-RUN pip3 install -r /tmp/pythonpackages.yml
+RUN python3 -m pip uninstall -y pycrypto crypto || true && \
+    python3 -m pip install --no-cache-dir --force-reinstall \
+      -r /tmp/pythonpackages.yml
 
 RUN adduser deployer --home-dir=/home/deployer  && \
     chmod 770 /home/deployer && \
@@ -32,4 +34,3 @@ USER deployer
 WORKDIR /home/deployer/tackle2-hub/hack/tool
 
 CMD ["/home/deployer/deployer.sh"]
-
